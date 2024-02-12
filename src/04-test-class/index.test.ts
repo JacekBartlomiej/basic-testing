@@ -1,5 +1,9 @@
 // Uncomment the code below and write your tests
-import { InsufficientFundsError, SynchronizationFailedError, getBankAccount } from '.';
+import {
+  InsufficientFundsError,
+  SynchronizationFailedError,
+  getBankAccount,
+} from '.';
 
 describe('BankAccount', () => {
   test('should create account with initial balance', () => {
@@ -13,14 +17,18 @@ describe('BankAccount', () => {
     const withdrawAmount = 150;
     const bankAccount = getBankAccount(initialBalance);
 
-    expect(() => bankAccount.withdraw(withdrawAmount)).toThrow(new InsufficientFundsError(initialBalance))
+    expect(() => bankAccount.withdraw(withdrawAmount)).toThrow(
+      new InsufficientFundsError(initialBalance),
+    );
   });
 
   test('should throw error when transferring more than balance', () => {
     const transferFromBankAccount = getBankAccount(100);
     const transferToBankAccount = getBankAccount(100);
 
-    expect(() => transferFromBankAccount.transfer(150, transferToBankAccount)).toThrowError()
+    expect(() =>
+      transferFromBankAccount.transfer(150, transferToBankAccount),
+    ).toThrowError();
   });
 
   test('should throw error when transferring to the same account', () => {
@@ -54,8 +62,10 @@ describe('BankAccount', () => {
     const transferFromInitialBalance = 100;
     const transferToInitialBalance = 80;
     const transferAmount = 30;
-    const extepctedTransferFromBalance = transferFromInitialBalance - transferAmount;
-    const extepctedTransferToBalance = transferToInitialBalance + transferAmount;
+    const extepctedTransferFromBalance =
+      transferFromInitialBalance - transferAmount;
+    const extepctedTransferToBalance =
+      transferToInitialBalance + transferAmount;
 
     const transferFromBankAccount = getBankAccount(transferFromInitialBalance);
     const transferToBankAccount = getBankAccount(transferToInitialBalance);
@@ -70,7 +80,7 @@ describe('BankAccount', () => {
   test('fetchBalance should return number in case if request did not failed', async () => {
     const bankAccount = getBankAccount(100);
     const balance = await bankAccount.fetchBalance();
-    if(balance) {
+    if (balance) {
       expect(typeof balance).toBe('number');
     }
   });
@@ -79,7 +89,7 @@ describe('BankAccount', () => {
     const initialBalance = 110;
     const bankAccount = getBankAccount(initialBalance);
     const balance = await bankAccount.fetchBalance();
-    if(typeof balance === 'number') {
+    if (typeof balance === 'number') {
       expect(balance).not.toBe(initialBalance);
     }
   });
@@ -88,7 +98,7 @@ describe('BankAccount', () => {
     const bankAccount = getBankAccount(100);
     try {
       await bankAccount.synchronizeBalance();
-    } catch(error) {
+    } catch (error) {
       expect(error).toEqual(new SynchronizationFailedError());
     }
   });

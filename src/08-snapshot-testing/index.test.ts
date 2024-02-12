@@ -7,8 +7,8 @@ describe('generateLinkedList', () => {
     const linkedList = generateLinkedList([1]);
     expect(linkedList).toStrictEqual({
       value: 1,
-      next: { value: null, next: null }
-    })
+      next: { value: null, next: null },
+    });
   });
 
   // Check match by comparison with snapshot

@@ -4,7 +4,6 @@ import { throttledGetDataFromApi } from './index';
 
 jest.mock('axios');
 
-
 describe('throttledGetDataFromApi', () => {
   const relativePath = 'relative/path';
   const expectedData = [{ name: 'Bob' }];
@@ -20,15 +19,18 @@ describe('throttledGetDataFromApi', () => {
   });
 
   beforeEach(() => {
-    (axios.get as jest.MockedFunction<typeof axios.get>).mockResolvedValue(expectedResponse);
-    (axios.create as jest.MockedFunction<typeof axios.create>) = jest.fn(() => axios);
-  })
-
+    (axios.get as jest.MockedFunction<typeof axios.get>).mockResolvedValue(
+      expectedResponse,
+    );
+    (axios.create as jest.MockedFunction<typeof axios.create>) = jest.fn(
+      () => axios,
+    );
+  });
 
   test('should create instance with provided base url', async () => {
     await throttledGetDataFromApi(relativePath);
     jest.runAllTimers();
-    return expect(axios.create).toHaveBeenCalledWith({baseURL});
+    return expect(axios.create).toHaveBeenCalledWith({ baseURL });
   });
 
   test('should perform request to correct provided url', async () => {
