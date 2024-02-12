@@ -1,5 +1,5 @@
 // Uncomment the code below and write your tests
-// import { readFileAsynchronously, doStuffByTimeout, doStuffByInterval } from '.';
+import { readFileAsynchronously, doStuffByTimeout, doStuffByInterval } from '.';
 
 describe('doStuffByTimeout', () => {
   beforeAll(() => {
@@ -11,11 +11,22 @@ describe('doStuffByTimeout', () => {
   });
 
   test('should set timeout with provided callback and timeout', () => {
-    // Write your test here
+    const timeout = 1000;
+    jest.spyOn(global, 'setTimeout');
+    const callback = jest.fn(() => console.log('something'));
+    doStuffByTimeout(callback, timeout);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    expect(setTimeout).toHaveBeenLastCalledWith(callback, timeout);
   });
 
   test('should call callback only after timeout', () => {
-    // Write your test here
+    const timeout = 1000;
+    const callback = jest.fn();
+    doStuffByTimeout(callback, timeout);
+    expect(callback).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(timeout);
+    expect(callback).toHaveBeenCalled();
+    expect(callback).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -29,13 +40,31 @@ describe('doStuffByInterval', () => {
   });
 
   test('should set interval with provided callback and timeout', () => {
-    // Write your test here
+    const timeout = 1000;
+    jest.spyOn(global, 'setInterval');
+    const callback = jest.fn(() => console.log('something'));
+    doStuffByInterval(callback, timeout);
+    expect(setInterval).toHaveBeenCalledTimes(1);
+    expect(setInterval).toHaveBeenLastCalledWith(callback, timeout);
   });
 
   test('should call callback multiple times after multiple intervals', () => {
-    // Write your test here
+    const timeout = 1000;
+    const callback = jest.fn();
+    doStuffByInterval(callback, timeout);
+    expect(callback).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(timeout);
+    expect(callback).toHaveBeenCalled();
+    jest.advanceTimersByTime(timeout);
+    expect(callback).toHaveBeenCalled();
+    jest.advanceTimersByTime(timeout);
+    expect(callback).toHaveBeenCalled();
+    expect(callback).toHaveBeenCalledTimes(3);
   });
 });
+
+jest.mock('path');
+jest.mock('fs/promises');
 
 describe('readFileAsynchronously', () => {
   test('should call join with pathToFile', async () => {
